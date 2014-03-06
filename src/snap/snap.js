@@ -124,14 +124,14 @@
 			return this.currentPage;
 		}
 
-		if ( x > 0 ) {
-			x = 0;
+		if ( x > this.boundX ) {
+			x = this.boundX;
 		} else if ( x < this.maxScrollX ) {
 			x = this.maxScrollX;
 		}
 
-		if ( y > 0 ) {
-			y = 0;
+		if ( y > this.boundY ) {
+			y = this.boundY;
 		} else if ( y < this.maxScrollY ) {
 			y = this.maxScrollY;
 		}

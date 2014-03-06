@@ -80,14 +80,14 @@
 		newX = this.x + Math.round(this.hasHorizontalScroll ? wheelDeltaX : 0);
 		newY = this.y + Math.round(this.hasVerticalScroll ? wheelDeltaY : 0);
 
-		if ( newX > 0 ) {
-			newX = 0;
+		if ( newX > this.boundX ) {
+			newX = this.boundX;
 		} else if ( newX < this.maxScrollX ) {
 			newX = this.maxScrollX;
 		}
 
-		if ( newY > 0 ) {
-			newY = 0;
+		if ( newY > this.boundY ) {
+			newY = this.boundY;
 		} else if ( newY < this.maxScrollY ) {
 			newY = this.maxScrollY;
 		}

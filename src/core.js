@@ -30,6 +30,14 @@ function IScroll (el, options) {
 		this.options[i] = options[i];
 	}
 
+  if (this.options.boundStart === true) {
+    this.boundX = this.options.startX;
+    this.boundY = this.options.startY;
+  } else {
+    this.boundX = 0;
+    this.boundY = 0;
+  }
+
 	// Normalize options
 	this.translateZ = this.options.HWCompositing && utils.hasPerspective ? ' translateZ(0)' : '';
 
@@ -219,11 +227,11 @@ IScroll.prototype = {
 		newY = this.y + deltaY;
 
 		// Slow down if outside of the boundaries
-		if ( newX > 0 || newX < this.maxScrollX ) {
-			newX = this.options.bounce ? this.x + deltaX / 3 : newX > 0 ? 0 : this.maxScrollX;
+		if ( newX > this.boundX || newX < this.maxScrollX ) {
+			newX = this.options.bounce ? this.x + deltaX / 3 : newX > this.boundX ? this.boundX : this.maxScrollX;
 		}
-		if ( newY > 0 || newY < this.maxScrollY ) {
-			newY = this.options.bounce ? this.y + deltaY / 3 : newY > 0 ? 0 : this.maxScrollY;
+		if ( newY > this.boundY || newY < this.maxScrollY ) {
+			newY = this.options.bounce ? this.y + deltaY / 3 : newY > this.boundY ? this.boundX : this.maxScrollY;
 		}
 
 		this.directionX = deltaX > 0 ? -1 : deltaX < 0 ? 1 : 0;
@@ -301,8 +309,8 @@ IScroll.prototype = {
 
 		// start momentum animation if needed
 		if ( this.options.momentum && duration < 300 ) {
-			momentumX = this.hasHorizontalScroll ? utils.momentum(this.x, this.startX, duration, this.maxScrollX, this.options.bounce ? this.wrapperWidth : 0, this.options.deceleration) : { destination: newX, duration: 0 };
-			momentumY = this.hasVerticalScroll ? utils.momentum(this.y, this.startY, duration, this.maxScrollY, this.options.bounce ? this.wrapperHeight : 0, this.options.deceleration) : { destination: newY, duration: 0 };
+			momentumX = this.hasHorizontalScroll ? utils.momentum(this.x, this.startX, duration, this.maxScrollX, this.options.bounce ? this.wrapperWidth : 0, this.options.deceleration, this.boundX) : { destination: newX, duration: 0 };
+			momentumY = this.hasVerticalScroll ? utils.momentum(this.y, this.startY, duration, this.maxScrollY, this.options.bounce ? this.wrapperHeight : 0, this.options.deceleration, this.boundY) : { destination: newY, duration: 0 };
 			newX = momentumX.destination;
 			newY = momentumY.destination;
 			time = Math.max(momentumX.duration, momentumY.duration);
@@ -313,7 +321,7 @@ IScroll.prototype = {
 
 		if ( newX != this.x || newY != this.y ) {
 			// change easing function when scroller goes out of the boundaries
-			if ( newX > 0 || newX < this.maxScrollX || newY > 0 || newY < this.maxScrollY ) {
+			if ( newX > this.boundX || newX < this.maxScrollX || newY > this.boundY || newY < this.maxScrollY ) {
 				easing = utils.ease.quadratic;
 			}
 
@@ -340,14 +348,14 @@ IScroll.prototype = {
 
 		time = time || 0;
 
-		if ( !this.hasHorizontalScroll || this.x > 0 ) {
-			x = 0;
+		if ( !this.hasHorizontalScroll || this.x > this.boundX ) {
+			x = this.boundX;
 		} else if ( this.x < this.maxScrollX ) {
 			x = this.maxScrollX;
 		}
 
-		if ( !this.hasVerticalScroll || this.y > 0 ) {
-			y = 0;
+		if ( !this.hasVerticalScroll || this.y > this.boundY ) {
+			y = this.boundY;
 		} else if ( this.y < this.maxScrollY ) {
 			y = this.maxScrollY;
 		}
@@ -494,8 +502,8 @@ IScroll.prototype = {
 		pos.left -= offsetX || 0;
 		pos.top  -= offsetY || 0;
 
-		pos.left = pos.left > 0 ? 0 : pos.left < this.maxScrollX ? this.maxScrollX : pos.left;
-		pos.top  = pos.top  > 0 ? 0 : pos.top  < this.maxScrollY ? this.maxScrollY : pos.top;
+		pos.left = pos.left > this.boundX ? this.boundX : pos.left < this.maxScrollX ? this.maxScrollX : pos.left;
+		pos.top  = pos.top  > this.boundY ? this.boundY : pos.top  < this.maxScrollY ? this.maxScrollY : pos.top;
 
 		time = time === undefined || time === null || time === 'auto' ? Math.max(Math.abs(this.x-pos.left), Math.abs(this.y-pos.top)) : time;
 

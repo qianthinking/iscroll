@@ -101,16 +101,16 @@
 			return;
 		}
 
-		if ( newX > 0 ) {
-			newX = 0;
+		if ( newX > this.boundX ) {
+			newX = this.boundX;
 			this.keyAcceleration = 0;
 		} else if ( newX < this.maxScrollX ) {
 			newX = this.maxScrollX;
 			this.keyAcceleration = 0;
 		}
 
-		if ( newY > 0 ) {
-			newY = 0;
+		if ( newY > this.boundY ) {
+			newY = this.boundY;
 			this.keyAcceleration = 0;
 		} else if ( newY < this.maxScrollY ) {
 			newY = this.maxScrollY;
