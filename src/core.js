@@ -65,7 +65,7 @@ function IScroll (el, options) {
 
   // If we forceBounce, bounce is automatically set to true
   if ( this.options.forceBounce === true ) {
-    this.options.bounce = true
+    this.options.bounce = true;
    }
 
 // INSERT POINT: NORMALIZATION

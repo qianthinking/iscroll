@@ -309,6 +309,11 @@ function IScroll (el, options) {
 		this.options.tap = 'tap';
 	}
 
+  // If we forceBounce, bounce is automatically set to true
+  if ( this.options.forceBounce === true ) {
+    this.options.bounce = true;
+   }
+
 	if ( this.options.shrinkScrollbars == 'scale' ) {
 		this.options.useTransition = false;
 	}
@@ -494,8 +499,9 @@ IScroll.prototype = {
 			deltaX = 0;
 		}
 
-		deltaX = this.hasHorizontalScroll ? deltaX : 0;
-		deltaY = this.hasVerticalScroll ? deltaY : 0;
+    // Keep delta value if it has scroll or forceBounce is true
+		deltaX = this.hasHorizontalScroll || (this.options.forceBounce && this.options.scrollY)? deltaX : 0;
+		deltaY = this.hasVerticalScroll   || (this.options.forceBounce && this.options.scrollY)? deltaY : 0;
 
 		newX = this.x + deltaX;
 		newY = this.y + deltaY;
