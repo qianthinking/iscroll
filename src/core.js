@@ -349,6 +349,9 @@ IScroll.prototype = {
 	},
 
 	resetPosition: function (time) {
+    if (this.holdPosition) {
+      return false;
+    }
 		var x = this.x,
 			y = this.y;
 
