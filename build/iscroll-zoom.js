@@ -682,6 +682,10 @@ IScroll.prototype = {
 
 		this.wrapperWidth	= this.wrapper.clientWidth;
 		this.wrapperHeight	= this.wrapper.clientHeight;
+    if (this.wrapperWidth === 0 && this.wrapperHeight === 0) {
+      // wrapper should be hidden
+      return;
+    }
 
 /* REPLACE START: refresh */
 	this.scrollerWidth	= Math.round(this.scroller.offsetWidth * this.scale);
